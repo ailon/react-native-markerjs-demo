@@ -6,7 +6,7 @@ import {
 
 interface AnnotationViewerProps {
   targetSrc: string;
-  annotation?: AnnotationState;
+  annotation: AnnotationState | null;
 }
 
 const AnnotationViewer = ({ targetSrc, annotation }: AnnotationViewerProps) => {
