@@ -1,0 +1,64 @@
+import { MarkerBaseState } from "@markerjs/react-native-markerjs";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import ToolbarButton from "./ToolbarButton";
+
+const markers = {
+  FrameMarker: {
+    icon: "square",
+  },
+  ArrowMarker: {
+    icon: "long-arrow-alt-right",
+  },
+  FreehandMarker: {
+    icon: "pencil-alt",
+  },
+  TextMarker: {
+    icon: "font",
+  },
+};
+
+interface ToolbarProps {
+  onDoneEditing?: () => void;
+  onCreateMarkerClick?: <T extends MarkerBaseState>(
+    markerType: string,
+    params?: Partial<T>
+  ) => void;
+}
+
+const Toolbar = ({ onDoneEditing, onCreateMarkerClick }: ToolbarProps) => {
+  return (
+    <View style={styles.toolbarContainer}>
+      <ToolbarButton icon="plus" />
+      <View style={styles.markerButtonsContainer}>
+        {Object.entries(markers).map(([key, { icon }]) => (
+          <ToolbarButton
+            key={key}
+            icon={icon}
+            onPress={() => onCreateMarkerClick?.(key)}
+          />
+        ))}
+      </View>
+      <ToolbarButton icon="check" onPress={onDoneEditing} />
+    </View>
+  );
+};
+
+export default Toolbar;
+
+const styles = StyleSheet.create({
+  toolbarContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#E60076",
+    backgroundColor: "#25292eaa",
+  },
+  markerButtonsContainer: {
+    flexDirection: "row",
+    gap: 10,
+  },
+});

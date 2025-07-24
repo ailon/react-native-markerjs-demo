@@ -33,6 +33,7 @@ export default function Index() {
           targetImage={selectedImage || PlaceholderImage}
           annotation={annotation || null}
           setAnnotation={setAnnotation}
+          doneEditing={() => setMode("view")}
         />
       )}
     </View>
