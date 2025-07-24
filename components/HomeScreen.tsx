@@ -21,12 +21,14 @@ interface HomeScreenProps {
   selectedImage: string;
   annotation?: AnnotationState;
   setSelectedImage: (uri: string) => void;
+  startAnnotating?: () => void;
 }
 
 const HomeScreen = ({
   selectedImage,
   annotation,
   setSelectedImage,
+  startAnnotating,
 }: HomeScreenProps) => {
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -52,6 +54,7 @@ const HomeScreen = ({
           variant="primary"
           icon={<EditIcon />}
           label="Annotate this image"
+          onPress={startAnnotating}
         />
         <View style={styles.secondaryButtonContainer}>
           <Button
