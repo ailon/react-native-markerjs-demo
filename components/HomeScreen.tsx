@@ -19,8 +19,9 @@ const EditIcon = () => (
 
 interface HomeScreenProps {
   selectedImage: string;
-  annotation?: AnnotationState;
+  annotation: AnnotationState | null;
   setSelectedImage: (uri: string) => void;
+  setAnnotation?: (annotation: AnnotationState | null) => void;
   startAnnotating?: () => void;
 }
 
@@ -28,6 +29,7 @@ const HomeScreen = ({
   selectedImage,
   annotation,
   setSelectedImage,
+  setAnnotation,
   startAnnotating,
 }: HomeScreenProps) => {
   const pickImageAsync = async () => {
@@ -38,6 +40,7 @@ const HomeScreen = ({
     });
 
     if (!result.canceled) {
+      setAnnotation?.(null);
       setSelectedImage(result.assets[0].uri);
     } else {
       alert("You did not select any image.");

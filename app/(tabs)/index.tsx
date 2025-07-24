@@ -14,9 +14,7 @@ export default function Index() {
     undefined
   );
 
-  const [annotation, setAnnotation] = useState<AnnotationState | undefined>(
-    undefined
-  );
+  const [annotation, setAnnotation] = useState<AnnotationState | null>(null);
 
   return (
     <View style={styles.container}>
@@ -25,6 +23,7 @@ export default function Index() {
           selectedImage={selectedImage || PlaceholderImage}
           annotation={annotation}
           setSelectedImage={setSelectedImage}
+          setAnnotation={setAnnotation}
           startAnnotating={() => setMode("annotate")}
         />
       )}
