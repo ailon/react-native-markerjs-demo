@@ -3,7 +3,10 @@ import { StyleSheet, View } from "react-native";
 
 import AnnotationEditor from "@/components/AnnotationEditor";
 import HomeScreen from "@/components/HomeScreen";
-import { AnnotationState } from "@markerjs/react-native-markerjs";
+import {
+  AnnotationState,
+  updateMarkerInAnnotation,
+} from "@markerjs/react-native-markerjs";
 
 const PlaceholderImage = require("@/assets/images/sample-portrait.jpg");
 
@@ -32,6 +35,13 @@ export default function Index() {
           targetImage={selectedImage || PlaceholderImage}
           annotation={annotation || null}
           setAnnotation={setAnnotation}
+          onMarkerPropertiesChange={(marker) => {
+            if (annotation) {
+              setAnnotation((prev) =>
+                prev ? updateMarkerInAnnotation(prev, marker) : null
+              );
+            }
+          }}
           doneEditing={() => setMode("view")}
         />
       )}

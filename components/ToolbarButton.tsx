@@ -1,6 +1,6 @@
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 interface ToolbarButtonProps {
   icon: string;
@@ -16,9 +16,9 @@ const ToolbarButton = ({
     <View
       style={[styles.buttonContainer, pressed && styles.buttonContainerPressed]}
     >
-      <Pressable onPress={onPress}>
+      <TouchableOpacity onPress={onPress}>
         <FontAwesome5 name={icon} size={20} color="#fff" />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };

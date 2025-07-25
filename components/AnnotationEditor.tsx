@@ -4,7 +4,7 @@ import {
   MarkerAreaHandle,
   MarkerBaseState,
 } from "@markerjs/react-native-markerjs";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Toolbar from "./Toolbar";
 
@@ -12,6 +12,7 @@ interface AnnotationEditorProps {
   targetImage: string;
   annotation: AnnotationState | null;
   setAnnotation: (annotation: AnnotationState) => void;
+  onMarkerPropertiesChange?: (marker: MarkerBaseState) => void;
   doneEditing?: () => void;
 }
 
@@ -19,9 +20,14 @@ const AnnotationEditor = ({
   targetImage,
   annotation,
   setAnnotation,
+  onMarkerPropertiesChange,
   doneEditing,
 }: AnnotationEditorProps) => {
   const markerAreaRef = useRef<MarkerAreaHandle>(null);
+
+  const [selectedMarker, setSelectedMarker] = useState<MarkerBaseState | null>(
+    null
+  );
 
   const handleCreateMarkerClick = <T extends MarkerBaseState>(
     markerType: string,
@@ -29,6 +35,7 @@ const AnnotationEditor = ({
   ) => {
     markerAreaRef.current?.createMarker(markerType, params);
   };
+
   return (
     <>
       <View style={styles.markerAreaContainer}>
@@ -36,13 +43,22 @@ const AnnotationEditor = ({
           targetSrc={targetImage}
           annotation={annotation}
           ref={markerAreaRef}
+          onSelectedMarkerChange={setSelectedMarker}
           onAnnotationChange={setAnnotation}
         />
       </View>
       <View style={styles.toolbarContainer}>
         <Toolbar
+          selectedMarker={selectedMarker}
+          onSwitchToSelectMode={() => setSelectedMarker(null)}
           onDoneEditing={doneEditing}
           onCreateMarkerClick={handleCreateMarkerClick}
+          onMarkerPropertiesChange={(marker) => {
+            onMarkerPropertiesChange?.({
+              ...selectedMarker,
+              ...marker,
+            } as MarkerBaseState);
+          }}
         />
       </View>
     </>
