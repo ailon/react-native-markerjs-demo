@@ -1,10 +1,15 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { AnnotationState } from "@markerjs/react-native-markerjs";
+import {
+  AnnotationState,
+  MarkerView,
+  MarkerViewHandle,
+} from "@markerjs/react-native-markerjs";
 import * as ImagePicker from "expo-image-picker";
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import * as MediaLibrary from "expo-media-library";
+import React, { useRef } from "react";
+import { PixelRatio, Platform, StyleSheet, View } from "react-native";
+import { captureRef } from "react-native-view-shot";
 
-import AnnotationViewer from "./AnnotationViewer";
 import Button from "./Button";
 
 const ImageIcon = () => (
@@ -32,6 +37,8 @@ const HomeScreen = ({
   setAnnotation,
   startAnnotating,
 }: HomeScreenProps) => {
+  const markerViewRef = useRef<MarkerViewHandle>(null);
+
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -47,10 +54,39 @@ const HomeScreen = ({
     }
   };
 
+  const handleRenderClick = async () => {
+    if (annotation && markerViewRef.current?.visualRef.current) {
+      try {
+        // react-native-view-shot renders with pixel ratio in mind on iOS, but not on Android.
+        const pixelRatio = Platform.OS === "ios" ? PixelRatio.get() : 1;
+
+        const localUri = await captureRef(
+          markerViewRef.current.visualRef.current,
+          {
+            width: annotation.width / pixelRatio,
+            height: annotation.height / pixelRatio,
+            quality: 1,
+          }
+        );
+
+        await MediaLibrary.saveToLibraryAsync(localUri);
+        if (localUri) {
+          alert("Image saved to your device's photo library.");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
   return (
     <>
       <View style={styles.imageContainer}>
-        <AnnotationViewer targetSrc={selectedImage} annotation={annotation} />
+        <MarkerView
+          ref={markerViewRef}
+          targetSrc={selectedImage}
+          annotation={annotation}
+        />
       </View>
       <View style={styles.footerContainer}>
         <Button
@@ -69,6 +105,7 @@ const HomeScreen = ({
             label="Save annotated"
             icon={<SaveIcon />}
             disabled={annotation === undefined}
+            onPress={handleRenderClick}
           />
         </View>
       </View>
