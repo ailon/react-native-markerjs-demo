@@ -1,8 +1,4 @@
-import {
-  AnnotationState,
-  createNewAnnotationState,
-  MarkerView,
-} from "@markerjs/react-native-markerjs";
+import { AnnotationState, MarkerView } from "@markerjs/react-native-markerjs";
 
 interface AnnotationViewerProps {
   targetSrc: string;
@@ -10,13 +6,7 @@ interface AnnotationViewerProps {
 }
 
 const AnnotationViewer = ({ targetSrc, annotation }: AnnotationViewerProps) => {
-  return (
-    <MarkerView
-      targetSrc={targetSrc}
-      // @todo: once support for undefined annotation is added, update this
-      annotation={annotation ? annotation : createNewAnnotationState(100, 100)}
-    />
-  );
+  return <MarkerView targetSrc={targetSrc} annotation={annotation} />;
 };
 
 export default AnnotationViewer;
