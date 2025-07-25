@@ -4,11 +4,18 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 interface ToolbarButtonProps {
   icon: string;
+  pressed?: boolean;
   onPress?: () => void;
 }
-const ToolbarButton = ({ icon, onPress }: ToolbarButtonProps) => {
+const ToolbarButton = ({
+  icon,
+  onPress,
+  pressed = false,
+}: ToolbarButtonProps) => {
   return (
-    <View style={styles.buttonContainer}>
+    <View
+      style={[styles.buttonContainer, pressed && styles.buttonContainerPressed]}
+    >
       <Pressable onPress={onPress}>
         <FontAwesome5 name={icon} size={20} color="#fff" />
       </Pressable>
@@ -23,5 +30,9 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonContainerPressed: {
+    backgroundColor: "#E60076",
+    borderRadius: "50%",
   },
 });

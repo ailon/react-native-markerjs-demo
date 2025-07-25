@@ -27,6 +27,13 @@ interface ToolbarProps {
 }
 
 const Toolbar = ({ onDoneEditing, onCreateMarkerClick }: ToolbarProps) => {
+  const [pressedButton, setPressedButton] = React.useState<string | null>(null);
+
+  const handleMarkerButtonPress = (markerType: string) => {
+    setPressedButton(markerType);
+    onCreateMarkerClick?.(markerType);
+  };
+
   return (
     <View style={styles.toolbarContainer}>
       <ToolbarButton icon="plus" />
@@ -35,7 +42,8 @@ const Toolbar = ({ onDoneEditing, onCreateMarkerClick }: ToolbarProps) => {
           <ToolbarButton
             key={key}
             icon={icon}
-            onPress={() => onCreateMarkerClick?.(key)}
+            pressed={pressedButton === key}
+            onPress={() => handleMarkerButtonPress(key)}
           />
         ))}
       </View>
@@ -49,6 +57,7 @@ export default Toolbar;
 const styles = StyleSheet.create({
   toolbarContainer: {
     width: "100%",
+    padding: 5,
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 10,
