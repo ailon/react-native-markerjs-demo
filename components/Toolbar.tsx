@@ -46,7 +46,13 @@ const Toolbar = ({
 
   return (
     <View style={styles.toolbarContainer}>
-      <ToolbarButton icon="plus" onPress={onSwitchToSelectMode} />
+      <ToolbarButton
+        icon="plus"
+        onPress={() => {
+          setPressedButton(null);
+          onSwitchToSelectMode?.();
+        }}
+      />
 
       {!selectedMarker && (
         <View style={styles.markerButtonsContainer}>
