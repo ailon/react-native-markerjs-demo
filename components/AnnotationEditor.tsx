@@ -55,7 +55,10 @@ const AnnotationEditor = ({
       <View style={styles.toolbarContainer}>
         <Toolbar
           selectedMarker={selectedMarker}
-          onSwitchToSelectMode={() => setSelectedMarkerId(null)}
+          onSwitchToSelectMode={() => {
+            markerAreaRef.current?.switchToSelectMode();
+            setSelectedMarkerId(null);
+          }}
           onDoneEditing={doneEditing}
           onCreateMarkerClick={handleCreateMarkerClick}
           onMarkerPropertiesChange={(marker) => {
